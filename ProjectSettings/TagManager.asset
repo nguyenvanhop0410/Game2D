@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Chest
+  - Statue
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Ground
+    uniqueID: 1182840445
+    locked: 0
+  - name: Rock
+    uniqueID: 3302215793
+    locked: 0
+  - name: Struct
+    uniqueID: 1705551839
+    locked: 0
+  - name: Chest
+    uniqueID: 3535549511
+    locked: 0
+  - name: Props
+    uniqueID: 1894956189
+    locked: 0
+  - name: Trees
+    uniqueID: 1480541117
+    locked: 0
+  - name: Decorate
+    uniqueID: 1261508865
+    locked: 0
+  - name: Light
+    uniqueID: 4172413899
+    locked: 0
+  - name: Statue
+    uniqueID: 1810437909
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 79486205
+    locked: 0

@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HealthBarFollow : MonoBehaviour
 {
     [Header("Follow Settings")]
     [SerializeField] private Transform target; // Player transform
-    [SerializeField] private Vector3 worldOffset = new Vector3(0, 1.2f, 0); // Offset ph�a tr�n player
+    [SerializeField] private Vector3 worldOffset = new Vector3(0, 1.2f, 0); // Offset phía trên player
     [SerializeField] private bool smoothFollow = true;
     [SerializeField] private float smoothSpeed = 10f;
 
@@ -20,21 +20,21 @@ public class HealthBarFollow : MonoBehaviour
 
         if (canvas == null)
         {
-            Debug.LogError("HealthBarFollow c?n n?m trong m?t Canvas!");
+            Debug.LogError("HealthBarFollow cần nằm trong một Canvas!");
         }
 
         if (target == null)
         {
-            // T? ??ng t�m Player n?u ch?a g�n
+            // Tự động tìm Player nếu chưa gán
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {
                 target = player.transform;
-                Debug.Log("? T? ??ng t�m th?y Player ?? follow");
+                Debug.Log("✓ Tự động tìm thấy Player để follow");
             }
             else
             {
-                Debug.LogError("? Kh�ng t�m th?y target! H�y g�n Player transform.");
+                Debug.LogError("✗ Không tìm thấy target! Hãy gán Player transform.");
             }
         }
     }
@@ -43,13 +43,13 @@ public class HealthBarFollow : MonoBehaviour
     {
         if (target == null || canvas == null || mainCamera == null) return;
 
-        // T�nh v? tr� world c?a player + offset
+        // Tính vị trí world của player + offset
         Vector3 worldPosition = target.position + worldOffset;
 
-        // Chuy?n ??i t? world position sang screen position
+        // Chuyển đổi từ world position sang screen position
         Vector3 screenPosition = mainCamera.WorldToScreenPoint(worldPosition);
 
-        // Chuy?n t? screen position sang local position trong Canvas
+        // Chuyển từ screen position sang local position trong Canvas
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvas.transform as RectTransform,
@@ -58,7 +58,7 @@ public class HealthBarFollow : MonoBehaviour
             out localPoint
         );
 
-        // C?p nh?t v? tr� c?a thanh m�u
+        // Cập nhật vị trí của thanh máu
         if (smoothFollow)
         {
             rectTransform.anchoredPosition = Vector2.Lerp(

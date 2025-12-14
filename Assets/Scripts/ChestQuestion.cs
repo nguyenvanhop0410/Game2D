@@ -14,6 +14,7 @@ public class ChestQuestion : MonoBehaviour
     public int energyRewardOnCorrect = 15; // năng lượng được cộng khi trả lời đúng
     public int damageOnWrongAnswer = 10; // năng lượng bị trừ khi trả lời sai
     
+    
     [Header("Rewards")]
     public GameObject rewardPrefab; // Phần thưởng khi trả lời đúng
     public Transform spawnPoint; // Vị trí spawn phần thưởng
@@ -63,6 +64,7 @@ public class ChestQuestion : MonoBehaviour
             }
             // Nếu dùng trigger, playerInRange được set trong OnTriggerEnter/Exit
             
+            
             if (playerInRange)
             {
                 // Nhấn E hoặc Enter để mở chest
@@ -76,6 +78,12 @@ public class ChestQuestion : MonoBehaviour
     
     void OpenChest()
     {
+        // Phát âm thanh mở rương
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayChestOpen();
+        }
+        
         if (chestType == ChestType.Question)
         {
             // Ensure QuestionUI instance exists
@@ -157,10 +165,17 @@ public class ChestQuestion : MonoBehaviour
         }
     }
     
+    
     // Được gọi khi trả lời đúng
     public void AnswerCorrect()
     {
         Debug.Log($"[{gameObject.name}] ✓ Trả lời đúng!");
+        
+        // Phát âm thanh thu thập rương
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayChestCollect();
+        }
         
         // Spawn phần thưởng
         if (rewardPrefab != null)
@@ -192,6 +207,7 @@ public class ChestQuestion : MonoBehaviour
         }
     }
     
+    
     // Được gọi khi trả lời sai
     public void AnswerWrong()
     {
@@ -211,6 +227,7 @@ public class ChestQuestion : MonoBehaviour
         // Reset để có thể thử lại
         hasBeenOpened = false;
     }
+    
     
     // Visualize interaction range trong Scene view
     void OnDrawGizmosSelected()

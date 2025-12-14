@@ -137,6 +137,19 @@ public class QuestionUI : MonoBehaviour
         bool correct = index == currentChest.correctIndex;
 
         Debug.Log($"Chọn đáp án {index}: {(correct ? "✓ ĐÚNG" : "✗ SAI")}");
+        
+        // Phát âm thanh kết quả
+        if (AudioManager.Instance != null)
+        {
+            if (correct)
+            {
+                AudioManager.Instance.PlayCorrectAnswer();
+            }
+            else
+            {
+                AudioManager.Instance.PlayWrongAnswer();
+            }
+        }
 
         if (correct)
         {

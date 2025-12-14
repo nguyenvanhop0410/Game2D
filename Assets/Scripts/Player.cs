@@ -141,6 +141,13 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // Nhấn ESC để thoát/vào fullscreen (không thoát game)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Screen.fullScreen = !Screen.fullScreen;
+            Debug.Log($"Fullscreen: {(Screen.fullScreen ? "Bật" : "Tắt")}");
+        }
+        
         if (rb != null && rb.gravityScale != 0f)
         {
             rb.gravityScale = 0f;
@@ -180,6 +187,12 @@ public class Player : MonoBehaviour
             rb.MovePosition(targetPosition);
             // Giữ velocity = 0 để tránh các lực dư ảnh hưởng
             rb.velocity = Vector2.zero;
+            
+            // Phát âm thanh bước chân khi di chuyển
+            if (movement.magnitude > 0.01f && AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayPlayerWalk();
+            }
         }
     }
     
@@ -261,6 +274,12 @@ public class Player : MonoBehaviour
         if (questionsCanvas != null)
         {
             questionsCanvas.SetActive(true);
+            
+            // Phát âm thanh popup câu hỏi
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayQuestPopup();
+            }
         }
         else
         {
@@ -276,6 +295,19 @@ public class Player : MonoBehaviour
         UpdateEnergyColor();
         Debug.Log($"Player mất {amount} năng lượng. Còn lại: {currentEnergy}");
         
+        // Phát âm thanh nhận sát thương hoặc trap
+        if (AudioManager.Instance != null)
+        {
+            if (isTrap)
+            {
+                AudioManager.Instance.PlayTrap();
+            }
+            else
+            {
+                AudioManager.Instance.PlayPlayerDamage();
+            }
+        }
+        
         // Hiển thị cảnh báo nếu là trap
         if (isTrap && trapWarningPanel != null)
         {
@@ -288,6 +320,7 @@ public class Player : MonoBehaviour
             GameOver();
         }
     }
+    
     
     // Hiển thị cảnh báo trap trong thời gian ngắn
     private IEnumerator ShowTrapWarning()
@@ -304,6 +337,7 @@ public class Player : MonoBehaviour
         // TODO: cập nhật UI điểm nếu có
     }
     
+    
     // API: Gọi từ ChestQuestion để cộng năng lượng
     public void RestoreEnergy(int amount)
     {
@@ -311,7 +345,14 @@ public class Player : MonoBehaviour
         if (energyBar != null) energyBar.value = currentEnergy;
         UpdateEnergyColor();
         Debug.Log($"Player hồi {amount} năng lượng. Hiện tại: {currentEnergy}/{maxEnergy}");
+        
+        // Phát âm thanh hồi máu
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayPlayerHeal();
+        }
     }
+    
     
     // API: Hiển thị thông báo thu thập rương thành công
     public void ShowSuccessReward()
@@ -322,6 +363,7 @@ public class Player : MonoBehaviour
         }
     }
     
+    
     // Hiển thị chúc mừng trong thời gian ngắn
     private IEnumerator ShowSuccessRewardCoroutine()
     {
@@ -329,6 +371,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSecondsRealtime(successRewardDuration);
         successRewardPanel.SetActive(false);
     }
+    
     
     // API: Hiển thị thông báo trả lời sai
     public void ShowWrongAnswer()
@@ -339,6 +382,7 @@ public class Player : MonoBehaviour
             StartCoroutine(ShowWrongAnswerCoroutine());
         }
     }
+    
     
     // Hiển thị thông báo sai trong thời gian ngắn
     private IEnumerator ShowWrongAnswerCoroutine()
@@ -378,6 +422,7 @@ public class Player : MonoBehaviour
         }
     }
     
+    
     // Coroutine bật Interpolation sau 1 frame
     private IEnumerator EnableInterpolationAfterFrame()
     {
@@ -416,6 +461,20 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("winPanel và retryPanel chưa được gán trong Inspector!");
         }
+        
+        // Phát nhạc win hoặc lose
+        if (AudioManager.Instance != null)
+        {
+            if (isWin)
+            {
+                AudioManager.Instance.PlayWinMusic();
+            }
+            else
+            {
+                AudioManager.Instance.PlayLoseMusic();
+            }
+        }
+        
         if (winPanel != null)
         {
             winPanel.SetActive(isWin);
@@ -437,11 +496,18 @@ public class Player : MonoBehaviour
         Time.timeScale = 0; // Dừng game khi kết thúc
     }
     
+    
     // Game Over khi hết năng lượng
     private void GameOver()
     {
         Debug.Log("=== GAME OVER ===");
         isGameOver = true;
+        
+        // Phát nhạc game over
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayLoseMusic();
+        }
         
         // Tắt tất cả các panel thông báo khác
         if (questionsCanvas != null) questionsCanvas.SetActive(false);
@@ -463,6 +529,7 @@ public class Player : MonoBehaviour
         
         Time.timeScale = 0; // Dừng game
     }
+    
     
     // Gọi từ nút Restart
     public void RestartGame()
